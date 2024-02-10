@@ -1,0 +1,46 @@
+      </td>
+    </tr>
+  </tbody>
+</table>  
+</body>
+
+<script>
+  var currentPage = "SECTION_ID";
+  var navBarOriginal = document.getElementById("section-navigation-bar").cloneNode(true)
+  var extraButtonsOriginal = navBarOriginal.children[navBarOriginal.children.length-2]
+  
+  function changeWindowLayout() {
+    var navBar = navBarOriginal.cloneNode(true);
+    if (window.innerWidth <= 600) {
+      for (var i=0; i < navBar.children.length; i++) {
+        var child = navBar.children[i];
+        if (child.tagName  == "BUTTON") {
+          if (child.id == "index" || child.id == currentPage) continue;
+          navBar.removeChild(child);
+          i--;
+        } 
+      }
+      var extraButtons = extraButtonsOriginal.cloneNode(true)
+      var buttonsDropdown = extraButtons.children[1];
+      for (var i=0; i < buttonsDropdown.children.length; i++) {
+        var child = buttonsDropdown.children[i];
+        if (child.id.includes(currentPage) ) {
+          buttonsDropdown.removeChild(child);
+          i--;
+        }
+      }
+      extraButtons.children[1].innerHTML = buttonsDropdown.innerHTML
+      navBar.children[navBar.children.length-2].innerHTML = extraButtons.innerHTML
+    }
+    else {
+      navBar.removeChild(navBar.children[navBar.children.length-2])
+    }
+    var navBarNow = document.getElementById("section-navigation-bar");
+    navBarNow.innerHTML = navBar.innerHTML
+  }
+  
+  changeWindowLayout()
+  window.onresize = changeWindowLayout;
+</script>
+
+</html>
