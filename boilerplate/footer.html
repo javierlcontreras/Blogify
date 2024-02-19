@@ -9,12 +9,28 @@
   var navBarOriginal = document.getElementById("section-navigation-bar").cloneNode(true)
   var extraButtonsOriginal = navBarOriginal.children[navBarOriginal.children.length-2]
   
+
+  var button_num = 0;
+  for (var i=0; i < navBarOriginal.children.length; i++) {
+    var child = navBarOriginal.children[i];
+    if (child.tagName  == "BUTTON") {
+        button_num += 1;
+    }
+  }
+
   function changeWindowLayout() {
     var navBar = navBarOriginal.cloneNode(true);
-    if (window.innerWidth <= 600) {
+
+    if (window.innerWidth >= 600 || button_num <= 2) {
+      navBar.removeChild(navBar.children[navBar.children.length-2])
+    }
+    else {
+      var button_it = 0;
       for (var i=0; i < navBar.children.length; i++) {
         var child = navBar.children[i];
         if (child.tagName  == "BUTTON") {
+          button_it += 1;
+          if (currentPage == "index" && button_it <= 2) continue;
           if (child.id == "index" || child.id == currentPage) continue;
           navBar.removeChild(child);
           i--;
@@ -24,16 +40,13 @@
       var buttonsDropdown = extraButtons.children[1];
       for (var i=0; i < buttonsDropdown.children.length; i++) {
         var child = buttonsDropdown.children[i];
-        if (child.id.includes(currentPage) ) {
+        if (child.id == "index-extra" || child.id == currentPage+"-extra") {
           buttonsDropdown.removeChild(child);
           i--;
         }
       }
       extraButtons.children[1].innerHTML = buttonsDropdown.innerHTML
       navBar.children[navBar.children.length-2].innerHTML = extraButtons.innerHTML
-    }
-    else {
-      navBar.removeChild(navBar.children[navBar.children.length-2])
     }
     var navBarNow = document.getElementById("section-navigation-bar");
     navBarNow.innerHTML = navBar.innerHTML
